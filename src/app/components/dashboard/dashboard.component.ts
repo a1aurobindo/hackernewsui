@@ -1,24 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
 
   reloadFlag: boolean = false;
-  // @ts-ignore
-  // @ViewChild(NewsListComponent) newsListComponent:NewsListComponent;
-  constructor() { }
 
-  ngOnInit(): void {
-    // this.refreshFeed();
-  }
+  constructor() { }
 
   refreshFeed(): void {
     console.log("test 1")
-    // this.newsListComponent.getNewsFeeds();
     this.reloadFlag =  true;
   }
 }
