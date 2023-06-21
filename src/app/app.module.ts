@@ -7,21 +7,19 @@ import { CategoryListComponent } from './components/category-list/category-list.
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NewsListComponent } from './components/news-list/news-list.component';
 import { HttpClientModule } from '@angular/common/http';
-import {RouterModule} from "@angular/router";
-import {MatTableModule} from "@angular/material/table";
+import { RouterModule} from "@angular/router";
+import { MatTableModule} from "@angular/material/table";
 import { NewsViewComponent } from './components/news-view/news-view.component';
 import { SafePipe } from './pipes/safe.pipe';
 import { PaginatorComponent } from './components/core/paginator/paginator.component';
-import {MatPaginatorModule} from "@angular/material/paginator";
-import {NoopAnimationsModule} from "@angular/platform-browser/animations";
-import { LoginComponent } from './components/login/login.component';
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
-import {MatIconModule} from "@angular/material/icon";
+import { MatPaginatorModule} from "@angular/material/paginator";
+import { NoopAnimationsModule} from "@angular/platform-browser/animations";
+import { ReactiveFormsModule} from "@angular/forms";
+import { MatFormFieldModule} from "@angular/material/form-field";
+import { MatIconModule} from "@angular/material/icon";
 import { HeaderComponent } from './components/core/header/header.component';
-import {MatMenuModule} from "@angular/material/menu";
-import {MatToolbarModule} from "@angular/material/toolbar";
+import { MatMenuModule} from "@angular/material/menu";
+import { MatToolbarModule} from "@angular/material/toolbar";
 
 @NgModule({
   declarations: [
@@ -32,8 +30,6 @@ import {MatToolbarModule} from "@angular/material/toolbar";
     NewsViewComponent,
     SafePipe,
     PaginatorComponent,
-    LoginComponent,
-    ResetPasswordComponent,
     HeaderComponent,
 
   ],

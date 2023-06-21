@@ -1,9 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {CognitoUserPool} from "amazon-cognito-identity-js";
-import {environment} from "../../../environments/environment";
 import {Router} from "@angular/router";
 import {NewsFeedService} from "../../services/news-feed.service";
-import {Subscription} from "rxjs";
 import {NewsListComponent} from "../news-list/news-list.component";
 
 @Component({
@@ -24,7 +21,8 @@ export class DashboardComponent implements OnInit {
   }
 
   refreshFeed(): void {
-    this.newsListComponent.refreshFeed();
+    console.log("test 1")
+    this.newsListComponent.getNewsFeeds();
     this.reloadFlag =  true;
   }
 }

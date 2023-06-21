@@ -1,8 +1,8 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
-import {NewsTableDatasource} from "../../config/news-table.datasource";
-import {NewsFeedService} from "../../services/news-feed.service";
-import {Observable, Subscription} from "rxjs";
-import {News} from "../../model/news.model";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { NewsTableDatasource} from "../../config/news-table.datasource";
+import { NewsFeedService } from "../../services/news-feed.service";
+import { forkJoin, Observable, Subscription } from "rxjs";
+import { News } from "../../model/news.model";
 
 @Component({
   selector: 'app-news-list',
@@ -11,55 +11,46 @@ import {News} from "../../model/news.model";
 })
 export class NewsListComponent implements OnInit, OnDestroy {
 
-  pubdate:string ='';
-  category:string = '';
+  funcArr: Observable<News>[] = [];
   subscription: Subscription = new Subscription();
   dataSource: NewsTableDatasource = new NewsTableDatasource();
   constructor(private newsService: NewsFeedService) { }
 
   ngOnInit(): void {
-    this.getNewsFeeds(0);
+    this.getNewsFeeds();
   }
 
   clickNews(news: News): void {
 
-    window.open(news.url)
+    window.open(news.url, "_blank")
   }
 
-  getFeedOfThisDate(dateMs: number): void {
-    this.pubdate = new Date(dateMs).toISOString().split('T')[0]
-    this.getNewsFeeds(0)
-  }
-
-  getNewsFeeds(page: number): void {
+  getNewsFeeds(): void {
+    console.log("test 2")
     this.subscription.add(
       this.newsService.getAllFeeds().subscribe(ids => {
-          this.subscription.add(this.getFeedLoop(ids).subscribe())
-
-        this.dataSource = new NewsTableDatasource();
-        this.dataSource.loadNewsData(id);
+        this.subscription.add(this.getFeedLoop(ids).subscribe((resp) => {
+          let nresRespx = {
+            content : resp,
+            size : resp.length,
+            number : 1,
+            totalPages : 1,
+            totalElements : resp.length,
+            numberOfElements : resp.length,
+            firstPage : true,
+            lastPage : true
+          }
+          this.dataSource = new NewsTableDatasource();
+          this.dataSource.loadNewsData(nresRespx);
+        }))
       })
     );
   }
 
-  getFeedLoop(ids: number[]) : Observable<News> {
-    ids.forEach(id => this.newsService.getOneFeed(ids))
-  }
+  getFeedLoop(ids: number[]) : Observable<News[]> {
 
-  refreshFeed(): void {
-    this.category = '';
-    this.pubdate = '';
-    this.subscription.add(
-      this.newsService.getAllFeeds().subscribe(
-        (resp) => {
-          console.log(resp)
-          this.getNewsFeeds(0);
-        }, (err) => {
-          console.log(err);
-          this.getNewsFeeds(0);
-        }
-      )
-    );
+    ids.forEach(id => this.funcArr.push(this.newsService.getOneFeed(id)))
+    return forkJoin(this.funcArr)
   }
 
   ngOnDestroy(): void {
