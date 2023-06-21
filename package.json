@@ -21,7 +21,6 @@
     "@angular/platform-browser-dynamic": "~12.1.0",
     "@angular/router": "~12.1.0",
     "@schematics/angular": "^12.2.18",
-    "amazon-cognito-identity-js": "^6.2.0",
     "bootstrap": "^5.2.3",
     "moment": "^2.29.4",
     "ngx-bootstrap": "^10.2.0",
