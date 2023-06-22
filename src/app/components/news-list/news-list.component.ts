@@ -25,6 +25,10 @@ export class NewsListComponent implements OnInit, OnDestroy {
     window.open(news.url, "_blank")
   }
 
+  onScroll(): void {
+    console.log("scrolled")
+  }
+
   getNewsFeeds(): void {
     console.log("test 2")
     this.subscription.add(
@@ -42,6 +46,7 @@ export class NewsListComponent implements OnInit, OnDestroy {
           }
           this.dataSource = new NewsTableDatasource();
           this.dataSource.loadNewsData(nresRespx);
+          this.funcArr = [];
         }))
       })
     );
