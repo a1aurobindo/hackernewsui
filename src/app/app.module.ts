@@ -17,6 +17,7 @@ import { MatIconModule} from "@angular/material/icon";
 import { HeaderComponent } from './components/core/header/header.component';
 import { MatMenuModule} from "@angular/material/menu";
 import { MatToolbarModule} from "@angular/material/toolbar";
+import { InfiniteScrollModule } from "ngx-infinite-scroll";
 
 @NgModule({
   declarations: [
@@ -24,8 +25,7 @@ import { MatToolbarModule} from "@angular/material/toolbar";
     DashboardComponent,
     NewsListComponent,
     SafePipe,
-    HeaderComponent,
-
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +39,8 @@ import { MatToolbarModule} from "@angular/material/toolbar";
     MatFormFieldModule,
     MatIconModule,
     MatMenuModule,
-    MatToolbarModule
+    MatToolbarModule,
+    InfiniteScrollModule
   ],
   providers: [],
   bootstrap: [AppComponent]

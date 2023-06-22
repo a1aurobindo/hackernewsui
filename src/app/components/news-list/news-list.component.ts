@@ -11,13 +11,24 @@ import { News } from "../../model/news.model";
 })
 export class NewsListComponent implements OnInit, OnDestroy {
 
-  funcArr: Observable<News>[] = [];
   subscription: Subscription = new Subscription();
   dataSource: NewsTableDatasource = new NewsTableDatasource();
+  throttle: number = 0;
+  distance = 1;
+  pageSize = 20;
+  newsSizeLimit = 500;
+  indexId: number = 0;
+  allItemIds: number[] = [];
   constructor(private newsService: NewsFeedService) { }
 
   ngOnInit(): void {
-    this.getNewsFeeds();
+    this.dataSource = new NewsTableDatasource();
+    this.subscription.add(this.getTopStories().subscribe(
+        (resp) => {
+          this.allItemIds = resp;
+          this.getNextPageFeeds();
+        }
+    ));
   }
 
   clickNews(news: News): void {
@@ -26,36 +37,44 @@ export class NewsListComponent implements OnInit, OnDestroy {
   }
 
   onScroll(): void {
-    console.log("scrolled")
+    console.log("scrolled");
+    this.getNextPageFeeds();
   }
 
-  getNewsFeeds(): void {
-    console.log("test 2")
-    this.subscription.add(
-      this.newsService.getAllFeeds().subscribe(ids => {
-        this.subscription.add(this.getFeedLoop(ids).subscribe((resp) => {
-          let nresRespx = {
-            content : resp,
-            size : resp.length,
-            number : 1,
-            totalPages : 1,
-            totalElements : resp.length,
-            numberOfElements : resp.length,
-            firstPage : true,
-            lastPage : true
-          }
-          this.dataSource = new NewsTableDatasource();
-          this.dataSource.loadNewsData(nresRespx);
-          this.funcArr = [];
-        }))
-      })
+  getTopStories() :  Observable<number[]>{
+    return this.newsService.getAllFeeds();
+  }
+
+  getNextPageFeeds() : void {
+
+    if(this.allItemIds.length <= 0) {
+      return;
+    }
+
+    console.log(this.newsSizeLimit);
+
+    let funcArr: Observable<News>[] = []
+    let pageIds: number[] = new Array(this.pageSize).fill(0)
+      .map((n, index) => this.allItemIds[this.indexId + index]);
+    this.indexId = this.allItemIds.indexOf(pageIds[pageIds.length - 1]);
+
+    console.log(pageIds)
+    pageIds.forEach(id => funcArr.push(this.newsService.getOneFeed(id)));
+    forkJoin(funcArr).subscribe(
+      (resp) => {
+        let newsResp = {
+          content : resp,
+          size : resp.length,
+          number : 1,
+          totalPages : 1,
+          totalElements : resp.length,
+          numberOfElements : resp.length,
+          firstPage : true,
+          lastPage : true
+        }
+        this.dataSource.loadNewsData(newsResp);
+      }
     );
-  }
-
-  getFeedLoop(ids: number[]) : Observable<News[]> {
-
-    ids.forEach(id => this.funcArr.push(this.newsService.getOneFeed(id)))
-    return forkJoin(this.funcArr)
   }
 
   ngOnDestroy(): void {

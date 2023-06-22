@@ -8,9 +8,10 @@ import { News } from "../model/news.model";
 })
 export class NewsFeedService {
 
-  allFeedUrl: string = "https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty"
-  oneFeedUrl: string = "https://hacker-news.firebaseio.com/v0/item/"
-  oneFeedSuffix:string = ".json?print=pretty"
+  private allFeedUrl: string = "https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty"
+  private  oneFeedUrl: string = "https://hacker-news.firebaseio.com/v0/item/"
+  private oneFeedSuffix:string = ".json?print=pretty"
+  private maxItemUrl: string = "https://hacker-news.firebaseio.com/v0/maxitem.json?print=pretty"
 
   constructor(private httpClient: HttpClient) {
   }
@@ -24,13 +25,8 @@ export class NewsFeedService {
 
     return this.httpClient.get<News>(this.oneFeedUrl + newsId + this.oneFeedSuffix);
   }
-}
 
-// export const parameterizedString = (...args: string[]): string => {
-//   const str: string = args[0];
-//   const params: string[] = args.filter((_, index: number) => index > 0);
-//   return !str ? '' : str.replace(/%s[0-9]+/g, (matchedStr: string) => {
-//     const variableIndex = +matchedStr.replace('%s', '') - 1;
-//     return params[variableIndex];
-//   });
-// };
+  getMaxItemId() {
+    return this.httpClient.get<number>(this.maxItemUrl);
+  }
+}
