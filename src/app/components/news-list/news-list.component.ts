@@ -47,18 +47,15 @@ export class NewsListComponent implements OnInit, OnDestroy {
 
   getNextPageFeeds() : void {
 
-    if(this.allItemIds.length <= 0) {
+    if(this.allItemIds.length <= this.indexId ) {
       return;
     }
-
-    console.log(this.newsSizeLimit);
 
     let funcArr: Observable<News>[] = []
     let pageIds: number[] = new Array(this.pageSize).fill(0)
       .map((n, index) => this.allItemIds[this.indexId + index]);
     this.indexId = this.allItemIds.indexOf(pageIds[pageIds.length - 1]);
 
-    console.log(pageIds)
     pageIds.forEach(id => funcArr.push(this.newsService.getOneFeed(id)));
     forkJoin(funcArr).subscribe(
       (resp) => {
